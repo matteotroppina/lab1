@@ -96,7 +96,7 @@ function pushbuttonsave_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % save last transition matrix and anything else you want saved before exit
-global transm results numrounds policy gametype
+global transm transm2 results numrounds policy gametype
 filename = strcat('data_',num2str(gametype),'_',...
     num2str(policy),'_',num2str(numrounds));
 
@@ -111,7 +111,7 @@ if exist(sprintf([filename,'.mat']),'file') == 2
     end
     filename = filename_temp;
 end
-save(filename,'transm','results')
+save(filename,'transm', 'transm2','results')
 
 
 function testChoice(userchoice,handles)
@@ -165,7 +165,7 @@ if norounds == 1
     next = mchoice(norounds,0,0);
 else
     plot(handles.axes,1:norounds,results,'LineWidth',3)
-    next = mchoice(norounds,history(end-1,2),history(end,2));   % human
+    next = mchoice(norounds,history(end-1,2),history(end,2), history(end-1,1), history(end,1));   % human
 end
 history = [history;[next,0]];
 

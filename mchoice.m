@@ -33,16 +33,20 @@
 %
 
 % --- Main function ---
-function next = mchoice(ng, i, j)
+function next = mchoice(ng, i, j, i_comp, j_comp)
 % machine next move
-global samplem transm policy
+global samplem transm samplem2 transm2 policy
 if(ng == 1)
     % initialize matrices
     [samplem,transm]   = initmchoice;
+    [samplem2,transm2]   = initmchoice;
     next = randi(3);
 else
+    %update matrices
     samplem  = updatesamplem(i,j,samplem);
+    samplem2  = updatesamplem(i_comp,j_comp,samplem2);
     transm   = updatetransm(samplem);
+    transm2   = updatetransm(samplem2);
     
     switch policy
         case 1
@@ -54,7 +58,7 @@ else
         otherwise
             error('Bad policy given!')
     end
-    
+    transm2 %display computer transition matrix
 end
 
 
@@ -64,7 +68,7 @@ function next = predict1(j, transm)
 % predict player next move
 global param_a param_b
 
-transm %display transition matrix
+transm    %display transition matrix
 r = rand; %generate a sample from the standard uniform probability distribution
 
 if (r <= param_a)
