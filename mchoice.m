@@ -66,19 +66,21 @@ end
 
 function next = predict1(j, transm)
 % predict player next move
+
 global param_a param_b
+transm %display transition matrix
 
-transm    %display transition matrix
-r = rand; %generate a sample from the standard uniform probability distribution
+r = rand; %sample from the standard uniform probability distribution
+algorithm_choice = sum(r>=cumsum([0,param_a, param_b])); 
 
-if (r <= param_a)
-    hnext = mod(j,3)+1;
-elseif (r >= param_b)
-    hnext = j;
-else
-    hnext = mod(j+1,3)+1;
+switch algorithm_choice
+    case 1 %algorithm 1 (param_a probability to be executed)
+        hnext = mod(j,3)+1;
+    case 2 %algorithm 2 (param_b-param_a probability to be executed)
+        hnext = mod(j+1,3)+1;
+    case 3 %algorithm 3 (1-param_b probability to be executed)
+        hnext = j;
 end
-
 next = winchoice(hnext);
 
 %
